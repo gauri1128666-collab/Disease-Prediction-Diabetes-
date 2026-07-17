@@ -1,0 +1,39 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix
+
+data = {
+    'Glucose':  [85, 130, 95, 150, 100, 160, 90, 140, 105, 170, 88, 135, 98, 155, 102],
+    'BMI':      [22, 30, 24, 33, 25, 35, 23, 32, 26, 37, 21, 31, 24, 34, 27],
+    'Age':      [25, 45, 28, 50, 30, 55, 26, 48, 32, 60, 24, 46, 29, 52, 31],
+    'Outcome':  [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+}
+
+df = pd.DataFrame(data)
+
+print(df.head())
+
+X = df[['Glucose', 'BMI', 'Age']]
+y = df['Outcome']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print(y_test.values)
+print(y_pred)
+
+accuracy = accuracy_score(y_test, y_pred)
+print(accuracy)
+
+cm = confusion_matrix(y_test, y_pred)
+print(cm)
+
+new_patient = pd.DataFrame({'Glucose': [120], 'BMI': [29], 'Age': [40]})
+new_prediction = model.predict(new_patient)
+print(new_prediction)
